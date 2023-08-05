@@ -1,6 +1,38 @@
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/router";
+export default function Form({ signin,arr }) {
+  const router = useRouter();
+  const[user,setUser] = useState({
+      userName:"",
+      password:""
+  })
+  {console.log(arr)}
 
-export default function Form({ signin }) {
+  const updateEmail = (event)=>{
+      setUser(({...pre})=>{
+        return {...pre,"userName":event.target.value}
+      })
+      
+  }
+  const updatePassword = (event)=>{
+    setUser(({...pre})=>{
+      return {...pre,"password":event.target.value}
+    })
+    
+  }
+  const checkUser = (event)=>{
+    event.preventDefault();
+    arr.map((arr)=>{
+      if(arr.userName === user.userName && arr.password === user.password){
+        console.log("ok");
+      }
+    })
+  }
+  const goto = (event)=>{
+    event.preventDefault();
+    router.push('auth/signup')
+  }
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -26,6 +58,7 @@ export default function Form({ signin }) {
                   type="email"
                   autoComplete="email"
                   required
+                  onChange={updateEmail}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -47,6 +80,7 @@ export default function Form({ signin }) {
                   type="password"
                   autoComplete="current-password"
                   required
+                  onChange={updatePassword}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
@@ -65,7 +99,8 @@ export default function Form({ signin }) {
             </div>
             <div>
               <button
-                type="submit"
+                // type="submit"
+                onClick={signin ? {checkUser} : {goto} }
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 {signin ? "Sign in" : "Sign up"}
